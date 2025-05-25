@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Spectre.Console" Version="0.50.0" />
+    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.5" />
   </ItemGroup>
 
 </Project>
