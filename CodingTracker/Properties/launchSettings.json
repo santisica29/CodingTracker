@@ -2,7 +2,7 @@
   "profiles": {
     "CodingTracker": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Users\\Santi\\Desktop\\c#\\ConsoleApps\\CodingTracker"
+      "workingDirectory": "C:\\Users\\Santi\\Desktop\\c#\\ConsoleApps\\CodingTracker\\CodingTracker"
     }
   }
 }
