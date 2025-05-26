@@ -1,6 +1,15 @@
-﻿using System.Configuration;
+﻿using Microsoft.Data.Sqlite;
+using System.Configuration;
 
-string sAttr;
-sAttr = ConfigurationManager.AppSettings["ConnectionString"];
-Console.WriteLine("The value of Key0 is " + sAttr);
+string connectionString = ConfigurationManager.AppSettings["ConnectionString"];
+
+using (var connection = new SqliteConnection(connectionString))
+{
+    connection.Open();
+    var tableCmd = connection.CreateCommand();
+
+    tableCmd.CommandText = "";
+
+    tableCmd.ExecuteNonQuery();
+}
 
