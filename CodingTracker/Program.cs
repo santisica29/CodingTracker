@@ -23,3 +23,8 @@ void CreateDatabase()
     tableCmd.ExecuteNonQuery();
 }
 
+void UserInput()
+{
+
+}
+
