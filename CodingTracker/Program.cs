@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Configuration;
 using Spectre.Console;
+using static CodingTracker.Enums;
 
 string connectionString = ConfigurationManager.AppSettings["ConnectionString"];
 
@@ -28,14 +29,18 @@ void CreateDatabase()
 void UserInput()
 {
     var choice = AnsiConsole.Prompt(
-        new SelectionPrompt<string>()
+        new SelectionPrompt<MenuOption>()
         .Title("MENU")
-        .AddChoices(["Track My Code", "See Previous Coding Sessions", "Delete Coding Sessions"]));
+        .AddChoices(Enum.GetValues<MenuOption>()));
 
     switch (choice)
     {
-        case "T":
-            AnsiConsole.MarkupLine(choice);
+        case MenuOption.AddCodingSession:
+            //AnsiConsole.MarkupLine();
+            break;
+        case MenuOption.ViewCodingSession:
+            break;
+        case MenuOption.DeleteCodingSession:
             break;
         default:
             AnsiConsole.MarkupLine("anoh");
