@@ -1,28 +1,11 @@
-﻿using Microsoft.Data.Sqlite;
-using CodingTracker;
-using CodingTracker.View;
+﻿using CodingTracker.View;
+using CodingTracker.Data;
 
-CreateDatabase();
+DatabaseInitializer.CreateDatabase();
 UserInterface userInterface = new();
 userInterface.MainMenu();
 
-void CreateDatabase()
-{
-    using var connection = new SqliteConnection(Helpers.GetConnectionString());
-    connection.Open();
-    var tableCmd = connection.CreateCommand();
 
-    tableCmd.CommandText =
-        @"CREATE TABLE IF NOT EXISTS coding_tracker (
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Date TEXT,
-            StartTime TEXT,
-            EndTime TEXT,
-            Duration INTEGER
-            )";
-
-    tableCmd.ExecuteNonQuery();
-}
 
 
 
