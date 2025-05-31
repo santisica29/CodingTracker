@@ -1,16 +1,14 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.Configuration;
-using Spectre.Console;
-using static CodingTracker.Enums;
-
-string connectionString = ConfigurationManager.AppSettings["ConnectionString"];
+using CodingTracker;
+using CodingTracker.View;
 
 CreateDatabase();
-UserInput();
+UserInterface userInterface = new();
+userInterface.SeeMenu();
 
 void CreateDatabase()
 {
-    using var connection = new SqliteConnection(connectionString);
+    using var connection = new SqliteConnection(Helpers.GetConnectionString());
     connection.Open();
     var tableCmd = connection.CreateCommand();
 
@@ -26,25 +24,5 @@ void CreateDatabase()
     tableCmd.ExecuteNonQuery();
 }
 
-void UserInput()
-{
-    var choice = AnsiConsole.Prompt(
-        new SelectionPrompt<MenuOption>()
-        .Title("MENU")
-        .AddChoices(Enum.GetValues<MenuOption>()));
 
-    switch (choice)
-    {
-        case MenuOption.AddCodingSession:
-            //AnsiConsole.MarkupLine();
-            break;
-        case MenuOption.ViewCodingSession:
-            break;
-        case MenuOption.DeleteCodingSession:
-            break;
-        default:
-            AnsiConsole.MarkupLine("anoh");
-            break;
-    }
-}
 

@@ -6,7 +6,7 @@ internal class CodingSession
     public DateTime EndTime { get; set; }
     public DateTime Duration { get; set; }
 
-    void CalculateDuration()
+    internal void CalculateDuration()
     {
 
     }
