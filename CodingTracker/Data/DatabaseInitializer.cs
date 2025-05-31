@@ -1,16 +1,26 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Configuration;
 
 namespace CodingTracker.Data;
 internal static class DatabaseInitializer
 {
+    internal static string GetConnectionString()
+    {
+        return ConfigurationManager.AppSettings["ConnectionString"];
+    }
+
+    internal static string GetDBPath()
+    {
+        return ConfigurationManager.AppSettings["DatabasePath"];
+    }
     internal static void CreateDatabase()
     {
-        using var connection = new SqliteConnection(Helpers.GetConnectionString());
+        using var connection = new SqliteConnection(GetConnectionString());
         connection.Open();
         var tableCmd = connection.CreateCommand();
 
         tableCmd.CommandText =
-            @"CREATE TABLE IF NOT EXISTS coding_tracker (
+            @$"CREATE TABLE IF NOT EXISTS {GetDBPath()}(
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             Date TEXT,
             StartTime TEXT,

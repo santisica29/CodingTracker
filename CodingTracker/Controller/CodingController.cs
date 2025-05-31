@@ -1,14 +1,18 @@
-﻿using CodingTracker.Models;
+﻿using CodingTracker.Data;
+using CodingTracker.Models;
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Globalization;
+using System.Numerics;
 
 namespace CodingTracker.Controller;
 internal class CodingController
 {
     public void GetAllSessions()
     {
-        using var connection = new SqliteConnection(Helpers.GetConnectionString());
+        using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
         connection.Open();
         var tableCmd = connection.CreateCommand();
         tableCmd.CommandText = $"SELECT * FROM coding_tracker";
@@ -31,8 +35,9 @@ internal class CodingController
                 new CodingSession
                 {
                     Id = reader.GetInt32(0),
-                    StartTime = DateTime.ParseExact(reader.GetString(1), "yyyy-MM-dd", new CultureInfo("en-US")),
-                    EndTime = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd", new CultureInfo("en-US")),
+                    Date = DateTime.ParseExact(reader.GetString(1), "yyyy-MM-dd", new CultureInfo("en-US")),
+                    StartTime = DateTime.ParseExact(reader.GetString(2), "HH:mm", new CultureInfo("en-US")),
+                    EndTime = DateTime.ParseExact(reader.GetString(3), "HH:mm", new CultureInfo("en-US")),
                 });
         }
 
@@ -40,6 +45,7 @@ internal class CodingController
         table.Border(TableBorder.Rounded);
 
         table.AddColumn("[yellow]ID[/]");
+        table.AddColumn("[yellow]Date[/]");
         table.AddColumn("[yellow]Start Time[/]");
         table.AddColumn("[yellow]End Time[/]");
         table.AddColumn("[yellow]Duration[/]");
@@ -48,6 +54,7 @@ internal class CodingController
         {
             table.AddRow(
                 session.Id.ToString(),
+                $"[cyan]{session.Date}[/]",
                 $"[cyan]{session.StartTime}[/]",
                 $"[cyan]{session.EndTime}[/]",
                 $"[cyan]{session.Duration}[/]"
@@ -57,5 +64,23 @@ internal class CodingController
         AnsiConsole.Write(table);
         AnsiConsole.MarkupLine("Press Any Key to Continue.");
         Console.ReadKey();
+    }
+
+    internal void Insert()
+    {
+        string startDate = Helpers.ValidateDateinput(@"Enter the start date of your coding session (Format: yyyy-MM-dd HH:mm)");
+
+        string endDate = Helpers.ValidateDateinput(@"Enter the end date of your coding session (Format: yyyy-MM-dd HH:mm)");
+
+        using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
+        connection.Open();
+        var tableCmd = connection.CreateCommand();
+        tableCmd.CommandText =
+            @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (date, startTime, endTime, duration)
+               VALUES (@Date, @StartTime, @EndTime, @Duration)";
+
+
+
+
     }
 }
