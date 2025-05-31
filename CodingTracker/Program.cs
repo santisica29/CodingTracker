@@ -4,7 +4,7 @@ using CodingTracker.View;
 
 CreateDatabase();
 UserInterface userInterface = new();
-userInterface.SeeMenu();
+userInterface.MainMenu();
 
 void CreateDatabase()
 {

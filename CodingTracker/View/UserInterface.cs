@@ -7,7 +7,7 @@ internal class UserInterface
 {
     private readonly CodingSessionController _codingSessionsController = new();
 
-    internal void SeeMenu()
+    internal void MainMenu()
     {
         var choice = AnsiConsole.Prompt(
             new SelectionPrompt<MenuOption>()
