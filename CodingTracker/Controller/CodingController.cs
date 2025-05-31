@@ -4,7 +4,7 @@ using Spectre.Console;
 using System.Globalization;
 
 namespace CodingTracker.Controller;
-internal class CodingSessionController
+internal class CodingController
 {
     public void GetAllSessions()
     {

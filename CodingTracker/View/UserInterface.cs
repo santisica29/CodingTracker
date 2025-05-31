@@ -5,7 +5,7 @@ using static CodingTracker.Enums;
 namespace CodingTracker.View;
 internal class UserInterface
 {
-    private readonly CodingSessionController _codingSessionsController = new();
+    private readonly CodingController _codingController = new();
 
     internal void MainMenu()
     {
@@ -20,7 +20,7 @@ internal class UserInterface
                 //AnsiConsole.MarkupLine();
                 break;
             case MenuOption.ViewCodingSession:
-                _codingSessionsController.GetAllSessions();
+                _codingController.GetAllSessions();
                 break;
             case MenuOption.DeleteCodingSession:
                 break;
