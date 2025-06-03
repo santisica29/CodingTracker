@@ -22,10 +22,9 @@ internal static class DatabaseInitializer
         tableCmd.CommandText =
             @$"CREATE TABLE IF NOT EXISTS {GetDBPath()}(
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            Date TEXT,
             StartTime TEXT,
             EndTime TEXT,
-            Duration INTEGER
+            Duration TEXT
             )";
 
         tableCmd.ExecuteNonQuery();

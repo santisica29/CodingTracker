@@ -2,10 +2,8 @@
 using CodingTracker.Models;
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Globalization;
-using System.Numerics;
+using System.Reflection.PortableExecutable;
 
 namespace CodingTracker.Controller;
 internal class CodingController
@@ -35,9 +33,9 @@ internal class CodingController
                 new CodingSession
                 {
                     Id = reader.GetInt32(0),
-                    Date = DateTime.ParseExact(reader.GetString(1), "yyyy-MM-dd", new CultureInfo("en-US")),
-                    StartTime = DateTime.ParseExact(reader.GetString(2), "HH:mm", new CultureInfo("en-US")),
-                    EndTime = DateTime.ParseExact(reader.GetString(3), "HH:mm", new CultureInfo("en-US")),
+                    StartTime = DateTime.ParseExact(reader.GetString(1), "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),
+                    EndTime = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),
+                    Duration = TimeSpan.ParseExact(reader.GetString(3)),
                 });
         }
 
@@ -45,7 +43,6 @@ internal class CodingController
         table.Border(TableBorder.Rounded);
 
         table.AddColumn("[yellow]ID[/]");
-        table.AddColumn("[yellow]Date[/]");
         table.AddColumn("[yellow]Start Time[/]");
         table.AddColumn("[yellow]End Time[/]");
         table.AddColumn("[yellow]Duration[/]");
@@ -54,7 +51,6 @@ internal class CodingController
         {
             table.AddRow(
                 session.Id.ToString(),
-                $"[cyan]{session.Date}[/]",
                 $"[cyan]{session.StartTime}[/]",
                 $"[cyan]{session.EndTime}[/]",
                 $"[cyan]{session.Duration}[/]"
@@ -68,19 +64,23 @@ internal class CodingController
 
     internal void Insert()
     {
-        string startDate = Helpers.ValidateDateinput(@"Enter the start date of your coding session (Format: yyyy-MM-dd HH:mm)");
+        string startTime = Helpers.ValidateDateinput(@"Enter the start time of your coding session (HH:mm)");
 
-        string endDate = Helpers.ValidateDateinput(@"Enter the end date of your coding session (Format: yyyy-MM-dd HH:mm)");
+        string endTime = Helpers.ValidateDateinput(@"Enter the end time of your coding session (HH:mm)");
+
+        var session = new CodingSession(DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")), DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")));
 
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
         connection.Open();
         var tableCmd = connection.CreateCommand();
         tableCmd.CommandText =
-            @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (date, startTime, endTime, duration)
-               VALUES (@Date, @StartTime, @EndTime, @Duration)";
+            @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (startTime, endTime, duration)
+               VALUES (@StartTime, @EndTime, @Duration)";
 
+        tableCmd.Parameters.Add("@StartTime", SqliteType.Text).Value = startTime;
+        tableCmd.Parameters.Add("@EndTime", SqliteType.Text).Value = endTime;
+        tableCmd.Parameters.Add("@Duration", SqliteType.Text).Value = session.CalculateDuration();
 
-
-
+        tableCmd.ExecuteNonQuery();
     }
 }
