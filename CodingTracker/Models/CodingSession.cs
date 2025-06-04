@@ -1,14 +1,17 @@
 ﻿namespace CodingTracker.Models;
-internal class CodingSession
+public class CodingSession
 {
     public int Id { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public TimeSpan Duration { get; set; }
 
-    internal CodingSession(int id, DateTime startTime, DateTime endTime)
+    public CodingSession()
     {
-        Id = id;
+
+    }
+    public CodingSession(DateTime startTime, DateTime endTime)
+    {
         StartTime = startTime;
         EndTime = endTime;
         Duration = CalculateDuration();

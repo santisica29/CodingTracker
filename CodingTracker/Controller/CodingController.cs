@@ -16,7 +16,7 @@ internal class CodingController
 
         var codingSessions = connection.Query<CodingSession>(sql);
 
-        if (codingSessions == null)
+        if (codingSessions.Count() < 1)
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
             AnsiConsole.MarkupLine("Press Any Key to Continue.");
@@ -47,25 +47,26 @@ internal class CodingController
         Console.ReadKey();
     }
 
-    //internal void Insert()
-    //{
-    //    string startTime = Helpers.ValidateDateinput(@"Enter the start time of your coding session (HH:mm)");
+    internal void Insert()
+    {
+        
+        string startTime = Helpers.ValidateDateinput(@"Enter the start time of your coding session (HH:mm)");
 
-    //    string endTime = Helpers.ValidateDateinput(@"Enter the end time of your coding session (HH:mm)");
+        string endTime = Helpers.ValidateDateinput(@"Enter the end time of your coding session (HH:mm)");
 
-    //    var session = new CodingSession(DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")), DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")));
+        var session = new CodingSession(DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")), DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")));
 
-    //    using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
-    //    connection.Open();
-    //    var tableCmd = connection.CreateCommand();
-    //    tableCmd.CommandText =
-    //        @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (startTime, endTime, duration)
-    //           VALUES (@StartTime, @EndTime, @Duration)";
+        using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
+        var sql =
+            @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (startTime, endTime, duration)
+               VALUES (@StartTime, @EndTime, @Duration)";
 
-    //    tableCmd.Parameters.Add("@StartTime", SqliteType.Text).Value = startTime;
-    //    tableCmd.Parameters.Add("@EndTime", SqliteType.Text).Value = endTime;
-    //    tableCmd.Parameters.Add("@Duration", SqliteType.Text).Value = session.CalculateDuration();
+        var newCodingSession = new CodingSession()
+        {
+            StartTime = startTime,
+            EndTime = endTime,
+        };
 
-    //    tableCmd.ExecuteNonQuery();
-    //}
+        var affectedRows = connection.Execute(sql, newCodingSession);
+    }
 }

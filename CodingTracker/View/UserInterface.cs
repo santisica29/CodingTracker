@@ -17,6 +17,7 @@ internal class UserInterface
         switch (choice)
         {
             case MenuOption.AddCodingSession:
+                _codingController.Insert();
                 //AnsiConsole.MarkupLine();
                 break;
             case MenuOption.ViewCodingSession:
