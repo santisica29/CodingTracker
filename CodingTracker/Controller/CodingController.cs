@@ -61,12 +61,12 @@ internal class CodingController
             @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (startTime, endTime, duration)
                VALUES (@StartTime, @EndTime, @Duration)";
 
-        var newCodingSession = new CodingSession()
-        {
-            StartTime = startTime,
-            EndTime = endTime,
-        };
+        //var newCodingSession = new CodingSession()
+        //{
+        //    StartTime = startTime,
+        //    EndTime = endTime,
+        //};
 
-        var affectedRows = connection.Execute(sql, newCodingSession);
+        var affectedRows = connection.Execute(sql, new {StartTime = startTime, EndTime = endTime, Duration = session.CalculateDuration().ToString()});
     }
 }
