@@ -16,7 +16,7 @@ internal class CodingController
 
         var codingSessions = connection.Query<CodingSession>(sql);
 
-        if (codingSessions.Count() < 1)
+        if (!codingSessions.Any())
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
             AnsiConsole.MarkupLine("Press Any Key to Continue.");
