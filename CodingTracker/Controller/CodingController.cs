@@ -14,7 +14,7 @@ internal class CodingController
 
         var sql = $"SELECT * FROM coding_tracker";
 
-        var codingSessions = connection.Query<CodingSession>(sql);
+        var codingSessions = connection.Query(sql).ToList();
 
         if (!codingSessions.Any())
         {
@@ -35,7 +35,7 @@ internal class CodingController
         foreach (var session in codingSessions)
         {
             table.AddRow(
-                session.Id.ToString(),
+                $"{session.Id}",
                 $"[cyan]{session.StartTime}[/]",
                 $"[cyan]{session.EndTime}[/]",
                 $"[cyan]{session.Duration}[/]"
