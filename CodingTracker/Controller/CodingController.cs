@@ -16,6 +16,8 @@ internal class CodingController
 
         var codingSessions = connection.Query(sql).ToList();
 
+        // parse to coding session objects
+
         if (codingSessions.Count == 0)
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
