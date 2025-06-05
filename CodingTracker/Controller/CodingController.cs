@@ -16,7 +16,7 @@ internal class CodingController
 
         var codingSessions = connection.Query(sql).ToList();
 
-        if (!codingSessions.Any())
+        if (codingSessions.Count == 0)
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
             AnsiConsole.MarkupLine("Press Any Key to Continue.");
@@ -49,7 +49,6 @@ internal class CodingController
 
     internal void Insert()
     {
-        
         string startTime = Helpers.ValidateDateinput(@"Enter the start time of your coding session (HH:mm)");
 
         string endTime = Helpers.ValidateDateinput(@"Enter the end time of your coding session (HH:mm)");
@@ -61,12 +60,14 @@ internal class CodingController
             @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (startTime, endTime, duration)
                VALUES (@StartTime, @EndTime, @Duration)";
 
-        //var newCodingSession = new CodingSession()
-        //{
-        //    StartTime = startTime,
-        //    EndTime = endTime,
-        //};
-
         var affectedRows = connection.Execute(sql, new {StartTime = startTime, EndTime = endTime, Duration = session.CalculateDuration().ToString()});
+    }
+
+    internal void Delete()
+    {
+        GetAllSessions();
+
+        using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
+        var sql = $@"DELETE from {DatabaseInitializer.GetDBPath()} WHERE Id = @Id";
     }
 }
