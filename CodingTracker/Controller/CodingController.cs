@@ -6,9 +6,9 @@ using Spectre.Console;
 using System.Globalization;
 
 namespace CodingTracker.Controller;
-internal class CodingController : BaseController
+internal class CodingController : BaseController, IBaseController
 {
-    public List<CodingSession>? GetAllSessions()
+    public List<CodingSession>? GetSessions()
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
 
@@ -22,9 +22,9 @@ internal class CodingController : BaseController
 
         return listOfCodingSessions;
     }
-    public void ShowAllSessions()
+    public void ViewSessions()
     {
-        var list = GetAllSessions();
+        var list = GetSessions();
 
         if (list == null)
         {
@@ -57,7 +57,7 @@ internal class CodingController : BaseController
         Console.ReadKey();
     }
 
-    internal void Insert()
+    public void AddSession()
     {
         string startTime = Helpers.ValidateDateinput(@"Enter the start time of your coding session (HH:mm)");
 
@@ -73,10 +73,10 @@ internal class CodingController : BaseController
         var affectedRows = connection.Execute(sql, new {StartTime = startTime, EndTime = endTime, Duration = session.CalculateDuration().ToString()});
     }
 
-    internal void Delete()
+    public void DeleteSession()
     {
         Console.Clear();
-        var list = GetAllSessions();
+        var list = GetSessions();
 
 
 
