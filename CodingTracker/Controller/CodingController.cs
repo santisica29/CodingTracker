@@ -14,11 +14,12 @@ internal class CodingController
 
         var sql = $"SELECT * FROM coding_tracker";
 
-        var codingSessions = connection.Query(sql).ToList();
+        var listFromDB = connection.Query(sql).ToList();
 
         // parse to coding session objects
+        var listOfCodingSessions = Helpers.ParseAnonObjToCodingSession(listFromDB);
 
-        if (codingSessions.Count == 0)
+        if (listOfCodingSessions.Count == 0)
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
             AnsiConsole.MarkupLine("Press Any Key to Continue.");
@@ -34,13 +35,13 @@ internal class CodingController
         table.AddColumn("[yellow]End Time[/]");
         table.AddColumn("[yellow]Duration[/]");
 
-        foreach (var session in codingSessions)
+        foreach (var session in listOfCodingSessions)
         {
             table.AddRow(
                 $"{session.Id}",
                 $"[cyan]{session.StartTime}[/]",
                 $"[cyan]{session.EndTime}[/]",
-                $"[cyan]{session.Duration}[/]"
+                $"[cyan]{session.Duration.ToString()}[/]"
                 );
         }
 
