@@ -6,7 +6,7 @@ using Spectre.Console;
 using System.Globalization;
 
 namespace CodingTracker.Controller;
-internal class CodingController
+internal class CodingController : BaseController
 {
     public List<CodingSession>? GetAllSessions()
     {
