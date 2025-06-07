@@ -8,7 +8,7 @@ using System.Globalization;
 namespace CodingTracker.Controller;
 internal class CodingController : BaseController, IBaseController
 {
-    public List<CodingSession>? GetSessions()
+    public static List<CodingSession>? GetSessions()
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
 
