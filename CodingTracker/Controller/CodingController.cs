@@ -8,7 +8,7 @@ using System.Globalization;
 namespace CodingTracker.Controller;
 internal class CodingController
 {
-    public void GetAllSessions()
+    public List<CodingSession>? GetAllSessions()
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
 
@@ -16,10 +16,17 @@ internal class CodingController
 
         var listFromDB = connection.Query(sql).ToList();
 
-        // parse to coding session objects
+        if (listFromDB.Count == 0) return null;
+        
         var listOfCodingSessions = Helpers.ParseAnonObjToCodingSession(listFromDB);
 
-        if (listOfCodingSessions.Count == 0)
+        return listOfCodingSessions;
+    }
+    public void ShowAllSessions()
+    {
+        var list = GetAllSessions();
+
+        if (list == null)
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
             AnsiConsole.MarkupLine("Press Any Key to Continue.");
@@ -35,7 +42,7 @@ internal class CodingController
         table.AddColumn("[yellow]End Time[/]");
         table.AddColumn("[yellow]Duration[/]");
 
-        foreach (var session in listOfCodingSessions)
+        foreach (var session in list)
         {
             table.AddRow(
                 $"{session.Id}",
@@ -68,7 +75,10 @@ internal class CodingController
 
     internal void Delete()
     {
-        GetAllSessions();
+        Console.Clear();
+        var list = GetAllSessions();
+
+
 
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
         var sql = $@"DELETE from {DatabaseInitializer.GetDBPath()} WHERE Id = @Id";
