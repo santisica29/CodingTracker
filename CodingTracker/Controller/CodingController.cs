@@ -46,8 +46,8 @@ internal class CodingController : BaseController, IBaseController
         {
             table.AddRow(
                 $"{session.Id}",
-                $"[cyan]{session.StartTime}[/]",
-                $"[cyan]{session.EndTime}[/]",
+                $@"[cyan]{session.StartTime.ToString("dd-MMM-yy HH:mm")}[/]",
+                $@"[cyan]{session.EndTime.ToString("dd-MMM-yy HH:mm")}[/]",
                 $"[cyan]{session.Duration.ToString()}[/]"
                 );
         }
@@ -63,7 +63,10 @@ internal class CodingController : BaseController, IBaseController
 
         string endTime = Helpers.ValidateDateinput(@"Enter the end time of your coding session (HH:mm)");
 
-        var session = new CodingSession(DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")), DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")));
+        var session = new CodingSession(
+            DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")), 
+            DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"))
+        );
 
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
         var sql =
@@ -78,9 +81,34 @@ internal class CodingController : BaseController, IBaseController
         Console.Clear();
         var list = GetSessions();
 
+        if (list == null)
+        {
+            DisplayMessage("No sessions recorded.", "red");
+            Console.ReadKey();
+            return;
+        }
 
+        var sessionToDelete = AnsiConsole.Prompt(
+            new SelectionPrompt<CodingSession>()
+            .Title("Select a [red]session[/] to delete:")
+            .AddChoices(list));
 
-        using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
-        var sql = $@"DELETE from {DatabaseInitializer.GetDBPath()} WHERE Id = @Id";
+        if (ConfirmDeletion(sessionToDelete.ToString()))
+        {
+            using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
+            var sql = $@"DELETE from {DatabaseInitializer.GetDBPath()} WHERE Id = @Id";
+
+            try
+            {
+                var affectedRows = connection.Execute(sql, new { Id = sessionToDelete.Id });
+
+                if (affectedRows > 0) DisplayMessage("Deletion completed.", "green");
+                else DisplayMessage("No changes made");
+            }
+            catch (Exception ex)
+            {
+                DisplayMessage(ex.Message, "orange");
+            }
+        }  
     }
 }

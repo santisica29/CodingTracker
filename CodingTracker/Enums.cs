@@ -5,6 +5,7 @@ internal class Enums
     {
         AddCodingSession,
         ViewCodingSession,
-        DeleteCodingSession
+        DeleteCodingSession,
+        Exit
     }
 }
