@@ -112,4 +112,34 @@ internal class CodingController : BaseController, IBaseController
         AnsiConsole.MarkupLine("Press any key to continue.");
         Console.ReadKey();
     }
+
+    public void UpdateSession()
+    {
+        Console.Clear();
+        var list = GetSessions();
+
+        if (list == null)
+        {
+            DisplayMessage("No sessions recorded.", "red");
+            Console.ReadKey();
+            return;
+        }
+
+        var sessionToUpdate = AnsiConsole.Prompt(
+            new SelectionPrompt<CodingSession>()
+            .Title("Select a [red]session[/] to delete:")
+            .UseConverter(s => $"{s.Id} - {s.StartTime} - {s.EndTime} - {s.Duration}")
+            .AddChoices(list));
+
+        using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
+        var sql = @$"UPDATE from {DatabaseInitializer.GetDBName()} 
+                    WHERE Id = @Id 
+                    SET StartTime = @NewStartTime AND 
+                    EndTime = @NewEndTime";
+
+        // input new start time and endtime
+
+        connection.Execute(sql, new { });
+
+    }
 }
