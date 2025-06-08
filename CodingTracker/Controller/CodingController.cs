@@ -91,6 +91,7 @@ internal class CodingController : BaseController, IBaseController
         var sessionToDelete = AnsiConsole.Prompt(
             new SelectionPrompt<CodingSession>()
             .Title("Select a [red]session[/] to delete:")
+            .UseConverter(s => $"{s.Id} - {s.StartTime} - {s.EndTime} - {s.Duration}")
             .AddChoices(list));
 
         if (ConfirmDeletion(sessionToDelete.ToString()))
@@ -109,6 +110,13 @@ internal class CodingController : BaseController, IBaseController
             {
                 DisplayMessage(ex.Message, "orange");
             }
-        }  
+        }
+        else
+        {
+            DisplayMessage("Deletion canceled", "yellow");
+        }
+
+        AnsiConsole.MarkupLine("Press any key to continue.");
+        Console.ReadKey();
     }
 }

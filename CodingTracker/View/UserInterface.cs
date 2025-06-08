@@ -12,6 +12,8 @@ internal class UserInterface
         bool flag = true;
         while (flag)
         {
+            Console.Clear();
+
             var choice = AnsiConsole.Prompt(
             new SelectionPrompt<MenuOption>()
             .Title("MENU")
