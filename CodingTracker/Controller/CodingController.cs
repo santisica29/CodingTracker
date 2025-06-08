@@ -17,7 +17,7 @@ internal class CodingController : BaseController, IBaseController
         var listFromDB = connection.Query(sql).ToList();
 
         if (listFromDB.Count == 0) return null;
-        
+
         var listOfCodingSessions = Helpers.ParseAnonObjToCodingSession(listFromDB);
 
         return listOfCodingSessions;
@@ -64,16 +64,16 @@ internal class CodingController : BaseController, IBaseController
         string endTime = Helpers.ValidateDateinput(@"Enter the end time of your coding session (HH:mm)");
 
         var session = new CodingSession(
-            DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")), 
+            DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),
             DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"))
         );
 
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
         var sql =
-            @$"INSERT INTO {DatabaseInitializer.GetDBPath()} (startTime, endTime, duration)
+            @$"INSERT INTO {DatabaseInitializer.GetDBName()} (startTime, endTime, duration)
                VALUES (@StartTime, @EndTime, @Duration)";
 
-        var affectedRows = connection.Execute(sql, new {StartTime = startTime, EndTime = endTime, Duration = session.CalculateDuration().ToString()});
+        var affectedRows = connection.Execute(sql, new { StartTime = startTime, EndTime = endTime, Duration = session.CalculateDuration().ToString()});
     }
 
     public void DeleteSession()
@@ -97,19 +97,12 @@ internal class CodingController : BaseController, IBaseController
         if (ConfirmDeletion(sessionToDelete.ToString()))
         {
             using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
-            var sql = $@"DELETE from {DatabaseInitializer.GetDBPath()} WHERE Id = @Id";
+            var sql = $@"DELETE from {DatabaseInitializer.GetDBName()} WHERE Id = @Id";
 
-            try
-            {
-                var affectedRows = connection.Execute(sql, new { Id = sessionToDelete.Id });
+            var affectedRows = connection.Execute(sql, new { Id = sessionToDelete.Id });
 
-                if (affectedRows > 0) DisplayMessage("Deletion completed.", "green");
-                else DisplayMessage("No changes made");
-            }
-            catch (Exception ex)
-            {
-                DisplayMessage(ex.Message, "orange");
-            }
+            if (affectedRows > 0) DisplayMessage("Deletion completed.", "green");
+            else DisplayMessage("No changes made");
         }
         else
         {

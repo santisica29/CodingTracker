@@ -9,7 +9,7 @@ internal static class DatabaseInitializer
         return ConfigurationManager.AppSettings["ConnectionString"];
     }
 
-    internal static string GetDBPath()
+    internal static string GetDBName()
     {
         return ConfigurationManager.AppSettings["DatabasePath"];
     }
@@ -20,7 +20,7 @@ internal static class DatabaseInitializer
         var tableCmd = connection.CreateCommand();
 
         tableCmd.CommandText =
-            @$"CREATE TABLE IF NOT EXISTS {GetDBPath()}(
+            @$"CREATE TABLE IF NOT EXISTS {GetDBName()}(
             Id INTEGER PRIMARY KEY AUTOINCREMENT,
             StartTime TEXT,
             EndTime TEXT,
