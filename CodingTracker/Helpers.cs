@@ -1,6 +1,7 @@
 ﻿using CodingTracker.Models;
 using CodingTracker.View;
 using Spectre.Console;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace CodingTracker;
@@ -61,5 +62,58 @@ internal static class Helpers
         var eT = DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"));
 
         return eT < sT;
+    }
+
+    internal static TimeSpan RunStopWatch()
+    {
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+
+        AnsiConsole.MarkupLine(@"-------- TIME YOUR SESSION ---------
+        Press 'q' to quit.
+        Press 'p' to pause
+        Press 'r' to reset");
+
+        bool isRunning = true;
+        bool isPaused = false;
+
+        while (isRunning)
+        {
+            if (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.P:
+                        Console.SetCursorPosition(0, Console.CursorTop);
+                        AnsiConsole.MarkupLine($"Time: {stopwatch.Elapsed.ToString()}");
+                        if (isPaused)
+                        {
+                            stopwatch.Start();
+                            isPaused = false;
+                        }
+                        else
+                        {
+                            stopwatch.Stop();
+                            isPaused = true;
+                        }
+                        break;
+
+                    case ConsoleKey.Q:
+                        isRunning = false;
+                        stopwatch.Stop();
+                        break;
+
+                    case ConsoleKey.R:
+                        stopwatch.Restart();
+                        break;
+                }
+            }
+
+            Thread.Sleep(50);
+        }
+
+        return stopwatch.Elapsed;
     }
 }

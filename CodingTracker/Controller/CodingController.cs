@@ -3,11 +3,22 @@ using CodingTracker.Models;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace CodingTracker.Controller;
 internal class CodingController : BaseController, IBaseController
 {
+    public void StartSession()
+    {
+        DisplayMessage("Session started", "blue");
+        var timer = new Stopwatch();
+        timer.Start();
+
+        DisplayMessage("Press 's' to stop the timer");
+
+
+    }
     public static List<CodingSession>? GetSessions()
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
