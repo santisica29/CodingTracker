@@ -33,6 +33,9 @@ internal class UserInterface
                 case MenuOption.UpdateCodingSession:
                     _codingController.UpdateSession();
                     break;
+                case MenuOption.StartSession:
+                    _codingController.StartSession();
+                    break;
                 case MenuOption.Exit:
                     AnsiConsole.MarkupLine("Goodbye");
                     flag = false;

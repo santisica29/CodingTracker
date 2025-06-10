@@ -66,13 +66,16 @@ internal static class Helpers
 
     internal static string RunStopWatch()
     {
-        Stopwatch stopwatch = new();
-        stopwatch.Start();
-
         AnsiConsole.MarkupLine(@"-------- TIME YOUR SESSION ---------
         Press 'q' to quit.
         Press 'p' to pause
-        Press 'r' to reset");
+        Press 'r' to reset
+        ");
+
+        Thread.Sleep(1500);
+
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
 
         bool isRunning = true;
         bool isPaused = false;
@@ -110,12 +113,12 @@ internal static class Helpers
             }
             var time = stopwatch.Elapsed;
             Console.SetCursorPosition(0, Console.CursorTop);
-            AnsiConsole.MarkupLine($"Time: {time}\n");
+            AnsiConsole.Markup($"Time: {time.ToString(@"hh\:mm\:ss")}");
             Thread.Sleep(50);
         }
 
         var endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-        AnsiConsole.MarkupLine("Session finished.");
+        AnsiConsole.MarkupLine("\nSession finished.");
         Console.ReadKey();
 
         return endTime;
