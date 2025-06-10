@@ -59,9 +59,9 @@ internal class CodingController : BaseController, IBaseController
 
     public void AddSession()
     {
-        string startTime = Helpers.ValidateDateinput(@"Enter the start time of your coding session (HH:mm)");
+        string startTime = Helpers.GetDateInput("Enter the start time of your coding session (yyyy-MM-dd HH:mm)");
 
-        string endTime = Helpers.ValidateDateinput(@"Enter the end time of your coding session (HH:mm)");
+        string endTime = Helpers.GetDateInput("Enter the end time of your coding session (yyyy-MM-dd HH:mm)");
 
         var session = new CodingSession(
             DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),

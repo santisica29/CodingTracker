@@ -29,24 +29,30 @@ internal static class Helpers
         return list;
     }
 
-    internal static string ValidateDateinput(string message)
+    internal static string GetDateInput(string message)
     {
-        AnsiConsole.MarkupLine("");
+        AnsiConsole.MarkupLine(message);
+
         var dateInput = AnsiConsole.Prompt(
             new TextPrompt<string>(message));
 
+        if (dateInput.ToLower() == "t") return DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-        //check if its the same mainmenu
-        if (dateInput == "0") userInterface.MainMenu();
-        if (dateInput == "t") return DateTime.Now.ToString("yyyy-MM-dd");
-
-        while (!DateTime.TryParseExact(dateInput, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+        while (!IsFormattedCorrectly(dateInput, "yyyy-MM-dd HH:mm") || String.IsNullOrEmpty(dateInput))
         {
-            AnsiConsole.MarkupLine("Invalid input");
             dateInput = AnsiConsole.Prompt(
-            new TextPrompt<string>("Please insert the date: (Format: yyyy - MM - dd).Type t to enter today's date or 0 to return to main menu"));
+            new TextPrompt<string>("Invalid input, try again."));
         }
 
         return dateInput;
+    }
+
+    internal static bool IsFormattedCorrectly(string date, string format)
+    {
+        if (!DateTime.TryParseExact(date, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"), DateTimeStyles.None, out _)){
+            return false;
+        }
+
+        return true;
     }
 }
