@@ -7,15 +7,23 @@ using System.Diagnostics;
 using System.Globalization;
 
 namespace CodingTracker.Controller;
-internal class CodingController : BaseController, IBaseController
+internal class CodingController : BaseController
 {
     public void StartSession()
     {
         DisplayMessage("Session started", "blue");
-        var timer = new Stopwatch();
-        timer.Start();
+        var startTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-        DisplayMessage("Press 's' to stop the timer");
+        var timer = Helpers.RunStopWatch();
+
+        var choice = AnsiConsole.Confirm("Do you want to save your session?");
+
+        if (choice)
+        {
+            var endTime = timer;
+
+        }
+
 
 
     }
@@ -68,15 +76,18 @@ internal class CodingController : BaseController, IBaseController
         Console.ReadKey();
     }
 
-    public void AddSession()
+    public void AddSession(string? startTime = null, string? endTime = null)
     {
-        string startTime = Helpers.GetDateInput("Enter the start time of your coding session (yyyy-MM-dd HH:mm)");
+        if (startTime == null || endTime == null)
+        {
+            startTime = Helpers.GetDateInput("Enter the start time of your coding session (yyyy-MM-dd HH:mm).\nPress 't' to enter actual time.");
 
-        string endTime = Helpers.GetDateInput("Enter the end time of your coding session (yyyy-MM-dd HH:mm)");
+            endTime = Helpers.GetDateInput("Enter the end time of your coding session (yyyy-MM-dd HH:mm)\nPress 't' to enter actual time.");
+        }
 
         while (Helpers.IsEndTimeLowerThanStartTime(startTime, endTime))
         {
-            endTime = Helpers.GetDateInput("Invalid input. End time must be after start time.");
+            endTime = Helpers.GetDateInput("Invalid input. End time must be larger than the start time.");
         }
 
         var session = new CodingSession(

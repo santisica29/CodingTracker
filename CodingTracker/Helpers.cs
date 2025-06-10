@@ -64,7 +64,7 @@ internal static class Helpers
         return eT < sT;
     }
 
-    internal static TimeSpan RunStopWatch()
+    internal static string RunStopWatch()
     {
         Stopwatch stopwatch = new();
         stopwatch.Start();
@@ -86,8 +86,6 @@ internal static class Helpers
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.P:
-                        Console.SetCursorPosition(0, Console.CursorTop);
-                        AnsiConsole.MarkupLine($"Time: {stopwatch.Elapsed.ToString()}");
                         if (isPaused)
                         {
                             stopwatch.Start();
@@ -110,10 +108,16 @@ internal static class Helpers
                         break;
                 }
             }
-
+            var time = stopwatch.Elapsed;
+            Console.SetCursorPosition(0, Console.CursorTop);
+            AnsiConsole.MarkupLine($"Time: {time}\n");
             Thread.Sleep(50);
         }
 
-        return stopwatch.Elapsed;
+        var endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+        AnsiConsole.MarkupLine("Session finished.");
+        Console.ReadKey();
+
+        return endTime;
     }
 }
