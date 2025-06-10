@@ -74,6 +74,12 @@ internal class CodingController : BaseController, IBaseController
                VALUES (@StartTime, @EndTime, @Duration)";
 
         var affectedRows = connection.Execute(sql, new { StartTime = startTime, EndTime = endTime, Duration = session.CalculateDuration().ToString()});
+
+        if (affectedRows > 0) DisplayMessage("Addition completed.", "green");
+        else DisplayMessage("No changes made");
+
+        AnsiConsole.MarkupLine("Press any key to continue.");
+        Console.ReadKey();
     }
 
     public void DeleteSession()
@@ -132,7 +138,7 @@ internal class CodingController : BaseController, IBaseController
             .AddChoices(list));
 
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
-        var sql = @$"UPDATE from {DatabaseInitializer.GetDBName()} 
+        var sql = @$"UPDATE {DatabaseInitializer.GetDBName()} 
                     SET StartTime = @NewStartTime, 
                     EndTime = @NewEndTime,
                     Duration = @Duration,
@@ -146,6 +152,9 @@ internal class CodingController : BaseController, IBaseController
             DateTime.ParseExact(newEndTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"))
         );
 
-        connection.Execute(sql, new { Id = sessionToUpdate.Id, StartTime = newStartTime, EndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
+        var affectedRows = connection.Execute(sql, new { Id = sessionToUpdate.Id, StartTime = newStartTime, EndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
+
+        if (affectedRows > 0) DisplayMessage("Update successfull.", "green");
+        else DisplayMessage("No changes made");
     }
 }

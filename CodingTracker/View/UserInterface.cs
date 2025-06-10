@@ -30,6 +30,9 @@ internal class UserInterface
                 case MenuOption.DeleteCodingSession:
                     _codingController.DeleteSession();
                     break;
+                case MenuOption.UpdateCodingSession:
+                    _codingController.UpdateSession();
+                    break;
                 case MenuOption.Exit:
                     AnsiConsole.MarkupLine("Goodbye");
                     flag = false;
@@ -39,6 +42,5 @@ internal class UserInterface
                     break;
             }
         }
-        
     }
 }

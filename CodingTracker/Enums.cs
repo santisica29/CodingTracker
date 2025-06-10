@@ -6,6 +6,7 @@ internal class Enums
         AddCodingSession,
         ViewCodingSession,
         DeleteCodingSession,
+        UpdateCodingSession,
         Exit
     }
 }

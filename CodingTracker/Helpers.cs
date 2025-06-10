@@ -31,8 +31,6 @@ internal static class Helpers
 
     internal static string GetDateInput(string message)
     {
-        AnsiConsole.MarkupLine(message);
-
         var dateInput = AnsiConsole.Prompt(
             new TextPrompt<string>(message));
 
