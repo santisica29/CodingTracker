@@ -18,14 +18,11 @@ internal class CodingController : BaseController
 
         var choice = AnsiConsole.Confirm("Do you want to save your session?");
 
-        if (choice)
-        {
-            var endTime = timer;
+        if (!choice) return;
 
-        }
+        var endTime = timer;
 
-
-
+        AddSession(startTime, endTime);
     }
     public static List<CodingSession>? GetSessions()
     {
