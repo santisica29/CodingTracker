@@ -133,13 +133,19 @@ internal class CodingController : BaseController, IBaseController
 
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
         var sql = @$"UPDATE from {DatabaseInitializer.GetDBName()} 
-                    WHERE Id = @Id 
-                    SET StartTime = @NewStartTime AND 
-                    EndTime = @NewEndTime";
+                    SET StartTime = @NewStartTime, 
+                    EndTime = @NewEndTime,
+                    Duration = @Duration,
+                    WHERE Id = @Id";
 
-        // input new start time and endtime
+        var newStartTime = Helpers.GetDateInput("Enter the start time of your coding session (yyyy-MM-dd HH:mm)");
+        var newEndTime = Helpers.GetDateInput("Enter the end time of your coding session (yyyy-MM-dd HH:mm)");
 
-        connection.Execute(sql, new { });
+        var newSession = new CodingSession(
+            DateTime.ParseExact(newStartTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),
+            DateTime.ParseExact(newEndTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"))
+        );
 
+        connection.Execute(sql, new { Id = sessionToUpdate.Id, StartTime = newStartTime, EndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
     }
 }
