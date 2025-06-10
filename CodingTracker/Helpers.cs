@@ -53,4 +53,13 @@ internal static class Helpers
 
         return true;
     }
+
+    internal static bool IsEndTimeLowerThanStartTime(string startTime, string endTime)
+    {
+        var sT = DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"));
+
+        var eT = DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"));
+
+        return eT < sT;
+    }
 }

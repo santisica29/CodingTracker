@@ -63,6 +63,11 @@ internal class CodingController : BaseController, IBaseController
 
         string endTime = Helpers.GetDateInput("Enter the end time of your coding session (yyyy-MM-dd HH:mm)");
 
+        while (Helpers.IsEndTimeLowerThanStartTime(startTime, endTime))
+        {
+            endTime = Helpers.GetDateInput("Invalid input. End time must be after start time.");
+        }
+
         var session = new CodingSession(
             DateTime.ParseExact(startTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),
             DateTime.ParseExact(endTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"))
@@ -146,6 +151,10 @@ internal class CodingController : BaseController, IBaseController
 
         var newStartTime = Helpers.GetDateInput("Enter the start time of your coding session (yyyy-MM-dd HH:mm)");
         var newEndTime = Helpers.GetDateInput("Enter the end time of your coding session (yyyy-MM-dd HH:mm)");
+        while (Helpers.IsEndTimeLowerThanStartTime(newStartTime, newEndTime))
+        {
+            newEndTime = Helpers.GetDateInput("Invalid input. End time must be after start time.");
+        }
 
         var newSession = new CodingSession(
             DateTime.ParseExact(newStartTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US")),
@@ -154,7 +163,7 @@ internal class CodingController : BaseController, IBaseController
 
         var affectedRows = connection.Execute(sql, new { Id = sessionToUpdate.Id, NewStartTime = newStartTime, NewEndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
 
-        if (affectedRows > 0) DisplayMessage("Update successfull.", "green");
+        if (affectedRows > 0) DisplayMessage("Update successful.", "green");
         else DisplayMessage("No changes made");
 
         AnsiConsole.MarkupLine("Press any key to continue.");
