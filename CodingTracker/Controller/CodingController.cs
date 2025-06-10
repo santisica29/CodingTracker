@@ -141,7 +141,7 @@ internal class CodingController : BaseController, IBaseController
         var sql = @$"UPDATE {DatabaseInitializer.GetDBName()} 
                     SET StartTime = @NewStartTime, 
                     EndTime = @NewEndTime,
-                    Duration = @Duration,
+                    Duration = @Duration
                     WHERE Id = @Id";
 
         var newStartTime = Helpers.GetDateInput("Enter the start time of your coding session (yyyy-MM-dd HH:mm)");
@@ -152,7 +152,7 @@ internal class CodingController : BaseController, IBaseController
             DateTime.ParseExact(newEndTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"))
         );
 
-        var affectedRows = connection.Execute(sql, new { Id = sessionToUpdate.Id, StartTime = newStartTime, EndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
+        var affectedRows = connection.Execute(sql, new { Id = sessionToUpdate.Id, NewStartTime = newStartTime, NewEndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
 
         if (affectedRows > 0) DisplayMessage("Update successfull.", "green");
         else DisplayMessage("No changes made");
