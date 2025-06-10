@@ -156,5 +156,8 @@ internal class CodingController : BaseController, IBaseController
 
         if (affectedRows > 0) DisplayMessage("Update successfull.", "green");
         else DisplayMessage("No changes made");
+
+        AnsiConsole.MarkupLine("Press any key to continue.");
+        Console.ReadKey();
     }
 }
