@@ -61,13 +61,7 @@ internal class CodingController : BaseController
             return;
         }
 
-        var table = new Table();
-        table.Border(TableBorder.Rounded);
-
-        table.AddColumn("[yellow]ID[/]");
-        table.AddColumn("[yellow]Start Time[/]");
-        table.AddColumn("[yellow]End Time[/]");
-        table.AddColumn("[yellow]Duration[/]");
+        var table = Helpers.CreateTable(["ID", "Start Time", "End Time", "Duration"], "yellow");
 
         foreach (var session in list)
         {

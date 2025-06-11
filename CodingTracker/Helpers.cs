@@ -123,4 +123,17 @@ internal static class Helpers
 
         return endTime;
     }
+
+    internal static Table CreateTable(string[] arr, string color)
+    {
+        var table = new Table();
+        table.Border(TableBorder.Rounded);
+
+        foreach (var item in arr)
+        {
+            table.AddColumn($"[{color}]{item}[/]");
+        }
+
+        return table;
+    }
 }
