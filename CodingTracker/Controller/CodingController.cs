@@ -3,7 +3,7 @@ using CodingTracker.Models;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Spectre.Console;
-using System.Diagnostics;
+using static CodingTracker.Enums;
 using System.Globalization;
 
 namespace CodingTracker.Controller;
@@ -27,7 +27,15 @@ internal class CodingController : BaseController
 
     public void ViewReportOfCodingSession()
     {
+        DisplayMessage("Get your coding tracker report!");
+
         // ask user to choose report based on days, weeks, months, years
+        var choice = AnsiConsole.Prompt(
+            new SelectionPrompt<ReportOption>()
+            .Title("Select your report type")
+            .AddChoices(Enum.GetValues<ReportOption>())
+            );
+
         // send choice as arg on method that gets a sql query
         // maybe refactor getSessions method to do it there
         // recieve list

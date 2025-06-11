@@ -11,4 +11,13 @@ internal class Enums
         ViewReportOfCodingSession,
         Exit
     }
+
+    internal enum ReportOption
+    {
+        Days,
+        Weeks,
+        Months,
+        Years,
+        Total
+    }
 }
