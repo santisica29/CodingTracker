@@ -36,13 +36,30 @@ internal class CodingController : BaseController
             .AddChoices(Enum.GetValues<ReportOption>())
             );
 
+        var unit = AnsiConsole.Prompt(
+            new TextPrompt<string>($"Select the number of {choice} for your report."));
+
         // send choice as arg on method that gets a sql query
+        var listOfReport = GetReport(choice, unit);
         // maybe refactor getSessions method to do it there
         // recieve list
         // do another query to figure out the total and average duration
         // display it
 
     }
+
+    public List<CodingSession> GetReport(ReportOption choice, string unit)
+    {
+        var reports = choice switch
+        {
+            ReportOption.Days => GetSessions(choice),
+            ReportOption.Weeks => throw new NotImplementedException(),
+            ReportOption.Months => throw new NotImplementedException(),
+            ReportOption.Years => throw new NotImplementedException(),
+            ReportOption.Total => throw new NotImplementedException(),
+        };
+    }
+
     public static List<CodingSession>? GetSessions()
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
