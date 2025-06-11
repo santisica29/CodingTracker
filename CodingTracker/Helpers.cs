@@ -72,8 +72,6 @@ internal static class Helpers
         Press 'r' to reset
         ");
 
-        Thread.Sleep(1500);
-
         Stopwatch stopwatch = new();
         stopwatch.Start();
 
@@ -118,7 +116,7 @@ internal static class Helpers
         }
 
         var endTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-        AnsiConsole.MarkupLine("\nSession finished.");
+        AnsiConsole.MarkupLine("\nSession finished.\nPress any key to continue.");
         Console.ReadKey();
 
         return endTime;
