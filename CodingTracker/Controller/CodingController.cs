@@ -50,21 +50,28 @@ internal class CodingController : BaseController
 
     public List<CodingSession> GetReport(ReportOption choice, string unit)
     {
+        var query = $"SELECT * FROM coding_tracker ";
         var reports = choice switch
         {
-            ReportOption.Days => GetSessions(choice),
+            ReportOption.Days => query += $"WHERE StartTime ",
             ReportOption.Weeks => throw new NotImplementedException(),
             ReportOption.Months => throw new NotImplementedException(),
             ReportOption.Years => throw new NotImplementedException(),
             ReportOption.Total => throw new NotImplementedException(),
         };
+
+        return GetSessions(query);
     }
 
-    public static List<CodingSession>? GetSessions()
+    public static List<CodingSession>? GetSessions(string query)
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
+        var sql = String.Empty;
 
-        var sql = $"SELECT * FROM coding_tracker";
+        if (query == null)
+        {
+            sql = $"SELECT * FROM coding_tracker";
+        }
 
         var listFromDB = connection.Query(sql).ToList();
 
