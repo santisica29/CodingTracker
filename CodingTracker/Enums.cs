@@ -8,6 +8,7 @@ internal class Enums
         DeleteCodingSession,
         UpdateCodingSession,
         StartSession,
+        ViewReportOfCodingSession,
         Exit
     }
 }

@@ -24,6 +24,17 @@ internal class CodingController : BaseController
 
         AddSession(startTime, endTime);
     }
+
+    public void ViewReportOfCodingSession()
+    {
+        // ask user to choose report based on days, weeks, months, years
+        // send choice as arg on method that gets a sql query
+        // maybe refactor getSessions method to do it there
+        // recieve list
+        // do another query to figure out the total and average duration
+        // display it
+
+    }
     public static List<CodingSession>? GetSessions()
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
