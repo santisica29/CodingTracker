@@ -67,13 +67,13 @@ internal class CodingController : BaseController
         return GetSessions(query);
     }
 
-    public static List<CodingSession>? GetSessions(string? query = null)
+    public static List<CodingSession>? GetSessions(string? sql = null)
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
 
-        if (query == null) query = $"SELECT * FROM coding_tracker";
+        if (sql == null) sql = $"SELECT * FROM coding_tracker";
 
-        var listFromDB = connection.Query(query).ToList();
+        var listFromDB = connection.Query(sql).ToList();
 
         if (listFromDB.Count == 0) return null;
 
