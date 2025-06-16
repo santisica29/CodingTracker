@@ -15,7 +15,6 @@ internal class Enums
     internal enum ReportOption
     {
         Days,
-        Weeks,
         Months,
         Years,
         Total

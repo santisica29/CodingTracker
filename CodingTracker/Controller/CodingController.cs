@@ -53,11 +53,10 @@ internal class CodingController : BaseController
         var query = $"SELECT * FROM coding_tracker ";
         var reports = choice switch
         {
-            ReportOption.Days => query += $"WHERE StartTime ",
-            ReportOption.Weeks => throw new NotImplementedException(),
-            ReportOption.Months => throw new NotImplementedException(),
-            ReportOption.Years => throw new NotImplementedException(),
-            ReportOption.Total => throw new NotImplementedException(),
+            ReportOption.Days => query += $"WHERE EndTime > date('now', '-{unit} days')",
+            ReportOption.Months => query += $"WHERE EndTime > date('now','start of month', '-{unit} months')",
+            ReportOption.Years => query += $"WHERE EndTime > date('now','start of year', '-{unit} years')",
+            ReportOption.Total => null,
         };
 
         return GetSessions(query);
