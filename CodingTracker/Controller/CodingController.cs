@@ -81,7 +81,7 @@ internal class CodingController : BaseController
 
         return listOfCodingSessions;
     }
-    public void ViewSessions(List<CodingSession> list = null)
+    public void ViewSessions(List<CodingSession>? list = null)
     {
         if (list == null) list = GetSessions();
 
