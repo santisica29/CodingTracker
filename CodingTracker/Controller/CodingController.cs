@@ -36,13 +36,18 @@ internal class CodingController : BaseController
             .AddChoices(Enum.GetValues<ReportOption>())
             );
 
-        var unit = AnsiConsole.Prompt(
-            new TextPrompt<string>($"Select the number of {choice} for your report."));
+        string? unit = null;
+        if (choice != ReportOption.Total)
+        {
+            unit = AnsiConsole.Prompt(
+                new TextPrompt<string>($"Select the number of {choice} for your report."));
+        }
 
         // send choice as arg on method that gets a sql query
         var listOfReport = GetReport(choice, unit);
         // maybe refactor getSessions method to do it there
         // recieve list
+        ViewSessions(listOfReport);
         // do another query to figure out the total and average duration
         // display it
 
@@ -51,12 +56,12 @@ internal class CodingController : BaseController
     public List<CodingSession> GetReport(ReportOption choice, string unit)
     {
         var query = $"SELECT * FROM coding_tracker ";
-        var reports = choice switch
+        _ = choice switch
         {
             ReportOption.Days => query += $"WHERE EndTime > date('now', '-{unit} days')",
             ReportOption.Months => query += $"WHERE EndTime > date('now','start of month', '-{unit} months')",
             ReportOption.Years => query += $"WHERE EndTime > date('now','start of year', '-{unit} years')",
-            ReportOption.Total => null,
+            ReportOption.Total => query
         };
 
         return GetSessions(query);
@@ -65,7 +70,7 @@ internal class CodingController : BaseController
     public static List<CodingSession>? GetSessions(string? query = null)
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
-        var sql = String.Empty;
+        var sql = query;
 
         if (query == null)
         {
@@ -80,11 +85,11 @@ internal class CodingController : BaseController
 
         return listOfCodingSessions;
     }
-    public void ViewSessions()
+    public void ViewSessions(List<CodingSession> list = null)
     {
-        var list = GetSessions();
+        if (list == null) list = GetSessions();
 
-        if (list == null)
+        if (list.Count == 0)
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
             AnsiConsole.MarkupLine("Press Any Key to Continue.");
