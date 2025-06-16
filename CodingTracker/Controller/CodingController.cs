@@ -63,7 +63,7 @@ internal class CodingController : BaseController
         return GetSessions(query);
     }
 
-    public static List<CodingSession>? GetSessions(string query)
+    public static List<CodingSession>? GetSessions(string? query = null)
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
         var sql = String.Empty;
