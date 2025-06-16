@@ -81,11 +81,9 @@ internal class CodingController : BaseController
 
         return listOfCodingSessions;
     }
-    public void ViewSessions(List<CodingSession>? list = null)
+    public void ViewSessions(List<CodingSession>? list = default)
     {
-        if (list == null) list = GetSessions();
-
-        if (list.Count == 0)
+        if (list == null || !list.Any())
         {
             AnsiConsole.MarkupLine("[red]No data found.[/]");
             AnsiConsole.MarkupLine("Press Any Key to Continue.");
@@ -93,19 +91,10 @@ internal class CodingController : BaseController
             return;
         }
 
-        var table = Helpers.CreateTable(["ID", "Start Time", "End Time", "Duration"], "yellow");
+        if (list == default) list = GetSessions();
 
-        foreach (var session in list)
-        {
-            table.AddRow(
-                $"{session.Id}",
-                $@"[cyan]{session.StartTime.ToString("dd-MMM-yy HH:mm")}[/]",
-                $@"[cyan]{session.EndTime.ToString("dd-MMM-yy HH:mm")}[/]",
-                $"[cyan]{session.Duration.ToString()}[/]"
-                );
-        }
+        Helpers.CreateTable(list, ["ID", "Start Time", "End Time", "Duration"]);
 
-        AnsiConsole.Write(table);
         AnsiConsole.MarkupLine("Press Any Key to Continue.");
         Console.ReadKey();
     }

@@ -1,5 +1,6 @@
 ﻿using CodingTracker.Models;
 using CodingTracker.View;
+using ConsoleTableExt;
 using Spectre.Console;
 using System.Diagnostics;
 using System.Globalization;
@@ -48,7 +49,8 @@ internal static class Helpers
 
     internal static bool IsFormattedCorrectly(string date, string format)
     {
-        if (!DateTime.TryParseExact(date, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"), DateTimeStyles.None, out _)){
+        if (!DateTime.TryParseExact(date, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+        {
             return false;
         }
 
@@ -122,16 +124,44 @@ internal static class Helpers
         return endTime;
     }
 
-    internal static Table CreateTable(string[] arr, string color)
+    internal static void CreateTable(List<CodingSession> list, string[] arr)
     {
-        var table = new Table();
-        table.Border(TableBorder.Rounded);
+        //var table = new Table();
+        //table.Border(TableBorder.Rounded);
 
-        foreach (var item in arr)
-        {
-            table.AddColumn($"[{color}]{item}[/]");
-        }
+        //foreach (var item in arr)
+        //{
+        //    table.AddColumn($"[{color}]{item}[/]");
+        //}
+        //return table;
 
-        return table;
+
+        //var tableData = new List<List<object>>();
+
+        //foreach (var i in list)
+        //{
+        //    var tab = new List<object>
+        //    {
+        //        i.Id,
+        //        i.StartTime,
+        //        i.EndTime,
+        //        i.Duration
+        //    };
+
+        //    tableData.Add(tab);
+
+        //    //Console.WriteLine($"{i.Id}");
+        //    //Console.WriteLine(i.StartTime);
+        //    //Console.WriteLine(i.EndTime);
+        //    //Console.WriteLine(i.Duration);
+
+        //}
+
+
+        ConsoleTableBuilder
+            .From(list)
+            .WithFormat(ConsoleTableBuilderFormat.Alternative)
+            .WithTitle("Your report",ConsoleColor.DarkYellow)
+            .ExportAndWriteLine();
     }
 }
