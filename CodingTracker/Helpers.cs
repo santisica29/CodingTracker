@@ -126,8 +126,26 @@ internal static class Helpers
 
     internal static void CreateTable(List<CodingSession> list, string[] arr)
     {
+
+        var tableData = new List<List<object>>();
+
+        foreach (var item in list)
+        {
+            var row = new List<object>
+            {
+                item.Id,
+                item.StartTime.ToString("dd-MMM-yyyy HH:mm tt"),
+                item.EndTime.ToString("dd-MMM-yyyy HH:mm tt"),
+                $"{item.Duration.Hours}h {item.Duration.Minutes}m"
+            };
+
+            tableData.Add(row);
+        }
+
+
         ConsoleTableBuilder
-            .From(list)
+            .From(tableData)
+            .WithColumn(arr)
             .WithFormat(ConsoleTableBuilderFormat.Alternative)
             .WithTitle("Your report",ConsoleColor.DarkYellow)
             .ExportAndWriteLine();
