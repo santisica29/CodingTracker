@@ -126,38 +126,6 @@ internal static class Helpers
 
     internal static void CreateTable(List<CodingSession> list, string[] arr)
     {
-        //var table = new Table();
-        //table.Border(TableBorder.Rounded);
-
-        //foreach (var item in arr)
-        //{
-        //    table.AddColumn($"[{color}]{item}[/]");
-        //}
-        //return table;
-
-
-        //var tableData = new List<List<object>>();
-
-        //foreach (var i in list)
-        //{
-        //    var tab = new List<object>
-        //    {
-        //        i.Id,
-        //        i.StartTime,
-        //        i.EndTime,
-        //        i.Duration
-        //    };
-
-        //    tableData.Add(tab);
-
-        //    //Console.WriteLine($"{i.Id}");
-        //    //Console.WriteLine(i.StartTime);
-        //    //Console.WriteLine(i.EndTime);
-        //    //Console.WriteLine(i.Duration);
-
-        //}
-
-
         ConsoleTableBuilder
             .From(list)
             .WithFormat(ConsoleTableBuilderFormat.Alternative)
