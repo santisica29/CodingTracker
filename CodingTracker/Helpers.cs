@@ -142,12 +142,21 @@ internal static class Helpers
             tableData.Add(row);
         }
 
-
         ConsoleTableBuilder
             .From(tableData)
             .WithColumn(arr)
             .WithFormat(ConsoleTableBuilderFormat.Alternative)
             .WithTitle("Your report",ConsoleColor.DarkYellow)
             .ExportAndWriteLine();
+    }
+
+    internal static void CheckIfListIsNullOrEmpty(List<CodingSession> list)
+    {
+        if (list == null || list.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[red]No sessions recorded.[/]");
+            Console.ReadKey();
+            return;
+        }
     }
 }

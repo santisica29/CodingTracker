@@ -67,7 +67,7 @@ internal class CodingController : BaseController
         return GetSessions(query);
     }
 
-    public static List<CodingSession>? GetSessions(string? sql = null)
+    public List<CodingSession>? GetSessions(string? sql = null)
     {
         using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
 
@@ -137,12 +137,7 @@ internal class CodingController : BaseController
         Console.Clear();
         var list = GetSessions();
 
-        if (list == null)
-        {
-            DisplayMessage("No sessions recorded.", "red");
-            Console.ReadKey();
-            return;
-        }
+        Helpers.CheckIfListIsNull(list);
 
         var sessionToDelete = AnsiConsole.Prompt(
             new SelectionPrompt<CodingSession>()

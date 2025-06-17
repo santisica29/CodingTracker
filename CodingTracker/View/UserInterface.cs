@@ -25,7 +25,7 @@ internal class UserInterface
                     _codingController.AddSession();
                     break;
                 case MenuOption.ViewCodingSession:
-                    _codingController.ViewSessions();
+                    _codingController.ViewSessions(_codingController.GetSessions());
                     break;
                 case MenuOption.DeleteCodingSession:
                     _codingController.DeleteSession();
