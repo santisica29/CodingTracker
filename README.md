@@ -42,4 +42,4 @@ Developed using C#, SQLite, Dapper ORM and [ConsoleTableExt Library](https://git
 # Areas to Improve
 - I need to get better at using the same methods for different purposes, I think i did an okey job by using a lot of default parameters but it can be improved.
 - Single responsibility. I did improve at this along the way, but I still have some work to do on it. I think I could have made my methods a little better so they only had a single use. 
-- Better naming my methods, sometimes I don't know if my code it's readable enough for others programers.
+- I need to get better at naming my methods, sometimes I don't know if my code it's readable enough for others programers.
