@@ -43,28 +43,28 @@ internal class CodingController : BaseController
                 new TextPrompt<string>($"Select the number of {choice} for your report."));
         }
 
-        // send choice as arg on method that gets a sql query
+        // send choice as arg on method that gets a sql sql
         var listOfReport = GetReport(choice, unit);
         // maybe refactor getSessions method to do it there
         // recieve list
         ViewSessions(listOfReport);
-        // do another query to figure out the total and average duration
+        // do another sql to figure out the total and average duration
         // display it
 
     }
 
     public List<CodingSession> GetReport(ReportOption choice, string unit)
     {
-        var query = $"SELECT * FROM coding_tracker ";
+        var sql = $"SELECT * FROM coding_tracker ";
         _ = choice switch
         {
-            ReportOption.Days => query += $"WHERE EndTime > date('now', '-{unit} days')",
-            ReportOption.Months => query += $"WHERE EndTime > date('now','start of month', '-{unit} months')",
-            ReportOption.Years => query += $"WHERE EndTime > date('now','start of year', '-{unit} years')",
-            ReportOption.Total => query
+            ReportOption.Days => sql += $"WHERE EndTime > date('now', '-{unit} days')",
+            ReportOption.Months => sql += $"WHERE EndTime > date('now','start of month', '-{unit} months')",
+            ReportOption.Years => sql += $"WHERE EndTime > date('now','start of year', '-{unit} years')",
+            ReportOption.Total => sql
         };
 
-        return GetSessions(query);
+        return GetSessions(sql);
     }
 
     public List<CodingSession>? GetSessions(string? sql = null)
@@ -81,17 +81,9 @@ internal class CodingController : BaseController
 
         return listOfCodingSessions;
     }
-    public void ViewSessions(List<CodingSession>? list = default)
+    public void ViewSessions(List<CodingSession>? list = null)
     {
-        if (list == null || !list.Any())
-        {
-            AnsiConsole.MarkupLine("[red]No data found.[/]");
-            AnsiConsole.MarkupLine("Press Any Key to Continue.");
-            Console.ReadKey();
-            return;
-        }
-
-        if (list == default) list = GetSessions();
+        Helpers.CheckIfListIsNullOrEmpty(list);
 
         Helpers.CreateTable(list, ["ID", "Start Time", "End Time", "Duration"]);
 
@@ -134,10 +126,9 @@ internal class CodingController : BaseController
 
     public void DeleteSession()
     {
-        Console.Clear();
         var list = GetSessions();
 
-        Helpers.CheckIfListIsNull(list);
+        Helpers.CheckIfListIsNullOrEmpty(list);
 
         var sessionToDelete = AnsiConsole.Prompt(
             new SelectionPrompt<CodingSession>()
@@ -150,7 +141,7 @@ internal class CodingController : BaseController
             using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
             var sql = $@"DELETE from {DatabaseInitializer.GetDBName()} WHERE Id = @Id";
 
-            var affectedRows = connection.Execute(sql, new { Id = sessionToDelete.Id });
+            var affectedRows = connection.Execute(sql, new { sessionToDelete.Id });
 
             if (affectedRows > 0) DisplayMessage("Deletion completed.", "green");
             else DisplayMessage("No changes made");

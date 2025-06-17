@@ -150,11 +150,12 @@ internal static class Helpers
             .ExportAndWriteLine();
     }
 
-    internal static void CheckIfListIsNullOrEmpty(List<CodingSession> list)
+    internal static void CheckIfListIsNullOrEmpty(List<CodingSession>? list)
     {
         if (list == null || list.Count == 0)
         {
-            AnsiConsole.MarkupLine("[red]No sessions recorded.[/]");
+            AnsiConsole.MarkupLine("[red]No data found.[/]");
+            AnsiConsole.MarkupLine("Press Any Key to Continue.");
             Console.ReadKey();
             return;
         }
