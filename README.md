@@ -29,7 +29,7 @@ Developed using C#, SQLite, Dapper ORM and [ConsoleTableExt Library](https://git
 
 * Reporting and other data output uses ConsoleTableExt library to output in a more pleasant way
 
-	- ![image](https://user-images.githubusercontent.com/15159720/141688462-e5dc465c-f188-4ac9-a166-397653c53c41.png)
+	- ![image](https://user-images.githubusercontent.com/15159720/141688462-e5dc465c-f188-4ac9-a166-397653c53c41.png)   
 
 # Challenges
 	
