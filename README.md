@@ -1,7 +1,7 @@
 # Coding Tracker
 My fourth C# application following [The C# Sharp Academy Path](https://www.thecsharpacademy.com/#console-area) and my last beginner Console app. 
 
-Based on the [coding tracker](https://www.thecsharpacademy.com/project/13/coding-tracker)
+Based on the [coding tracker](https://www.thecsharpacademy.com/project/13/coding-tracker) project. 
 Console based CRUD application to track time spent coding.
 Developed using C# and SQLite.
 
