@@ -3,7 +3,7 @@ My fourth C# application following [The C# Sharp Academy Path](https://www.thecs
 
 Based on the [coding tracker](https://www.thecsharpacademy.com/project/13/coding-tracker) project.  
 Console based CRUD application to track time spent coding.  
-Developed using C# and SQLite.  
+Developed using C#, SQLite, Dapper ORM and [ConsoleTableExt Library](https://github.com/minhhungit/ConsoleTableExt).  
 
 # Given Requirements:
 - [x] When the application starts, it should create a sqlite database, if one isn’t present.
@@ -30,7 +30,6 @@ Developed using C# and SQLite.
 * Reporting and other data output uses ConsoleTableExt library to output in a more pleasant way
 
 	- ![image](https://user-images.githubusercontent.com/15159720/141688462-e5dc465c-f188-4ac9-a166-397653c53c41.png)
-	- [GitHub for ConsoleTableExt Library](https://github.com/minhhungit/ConsoleTableExt)
 
 # Challenges
 	
