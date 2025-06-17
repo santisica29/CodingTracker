@@ -153,18 +153,23 @@ internal static class Helpers
     {
         var total = TimeSpan.Zero;
         var count = list.Count;
-        var avg = total / count;
 
         foreach (var item in list)
         {
             total += TimeSpan.Parse(item);
         }
 
+        var avg = total / count;
+
         var newObject = new List<object>()
         {
-            count,
-            $"{total.Hours}h {total.Minutes}m",
-            $"{avg.Hours}h {avg.Minutes}m"
+            new
+            {
+               NumOfSessions = count,
+               Total = $"{total.Hours}h {total.Minutes}m",
+               Avg = $"{avg.Hours}h {avg.Minutes}m"
+            }
+            
         };
 
         ConsoleTableBuilder

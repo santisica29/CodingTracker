@@ -44,9 +44,11 @@ internal class CodingController : BaseController
 
         // send choice as arg on method that gets a sql sql
         var listOfReport = GetReport(choice, unit);
+
+        var additionalList = GetReportOfTotalAndAvg(choice, unit);
         // maybe refactor getSessions method to do it there
         // recieve list
-        ViewSessions(listOfReport);
+        ViewSessions(listOfReport, additionalList);
         // do another sql to figure out the total and average duration
         // display it
     }
@@ -54,6 +56,7 @@ internal class CodingController : BaseController
     public List<CodingSession>? GetReport(ReportOption choice, string unit)
     {
         var sql = $"SELECT * FROM coding_tracker ";
+
         _ = choice switch
         {
             ReportOption.Days => sql += $"WHERE EndTime > date('now', '-{unit} days')",
@@ -66,6 +69,27 @@ internal class CodingController : BaseController
 
         return GetSessions(sql);
     }
+
+    public List<string>? GetReportOfTotalAndAvg(ReportOption choice, string unit)
+    {
+        using var connection = new SqliteConnection(DatabaseInitializer.GetConnectionString());
+
+        var sql = $"SELECT Duration FROM coding_tracker ";
+        _ = choice switch
+        {
+            ReportOption.Days => sql += $"WHERE EndTime > date('now', '-{unit} days')",
+            ReportOption.Months => sql += $"WHERE EndTime > date('now','start of month', '-{unit} months')",
+            ReportOption.Years => sql += $"WHERE EndTime > date('now','start of year', '-{unit} years')",
+            ReportOption.Total => sql
+        };
+
+        sql += " ORDER BY StartTime DESC";
+
+        var list = connection.Query<string>(sql).ToList();
+
+        return list;
+    }
+
 
     public List<CodingSession>? GetSessions(string? sql = null)
     {
@@ -81,14 +105,15 @@ internal class CodingController : BaseController
 
         return listOfCodingSessions;
     }
-    public void ViewSessions(List<CodingSession>? list = null, List<object> additionalList = null)
+    public void ViewSessions(List<CodingSession>? list = null, List<string> additionalList = null)
     {
         Helpers.CheckIfListIsNullOrEmpty(list);
 
         Helpers.CreateTable(list, ["ID", "Start Time", "End Time", "Duration"]);
+
         if(additionalList != null)
         {
-
+            Helpers.CreateTableOfAvg(additionalList);
         }
 
         AnsiConsole.MarkupLine("Press Any Key to Continue.");
