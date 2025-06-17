@@ -124,9 +124,8 @@ internal static class Helpers
         return endTime;
     }
 
-    internal static void CreateTable(List<CodingSession> list, string[] arr)
+    internal static void CreateTable(List<CodingSession> list, string[]? arr = null)
     {
-
         var tableData = new List<List<object>>();
 
         foreach (var item in list)
@@ -147,6 +146,32 @@ internal static class Helpers
             .WithColumn(arr)
             .WithFormat(ConsoleTableBuilderFormat.Alternative)
             .WithTitle("Your report",ConsoleColor.DarkYellow)
+            .ExportAndWriteLine();
+    }
+
+    internal static void CreateTableOfAvg(List<string> list)
+    {
+        var total = TimeSpan.Zero;
+        var count = list.Count;
+        var avg = total / count;
+
+        foreach (var item in list)
+        {
+            total += TimeSpan.Parse(item);
+        }
+
+        var newObject = new List<object>()
+        {
+            count,
+            $"{total.Hours}h {total.Minutes}m",
+            $"{avg.Hours}h {avg.Minutes}m"
+        };
+
+        ConsoleTableBuilder
+            .From(newObject)
+            .WithColumn("Num of Sessions", "Total", "Average per day")
+            .WithFormat(ConsoleTableBuilderFormat.Alternative)
+            .WithTitle("-------------")
             .ExportAndWriteLine();
     }
 

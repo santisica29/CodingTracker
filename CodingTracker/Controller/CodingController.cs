@@ -29,7 +29,6 @@ internal class CodingController : BaseController
     {
         DisplayMessage("Get your coding tracker report!");
 
-        // ask user to choose report based on days, weeks, months, years
         var choice = AnsiConsole.Prompt(
             new SelectionPrompt<ReportOption>()
             .Title("Select your report type")
@@ -50,10 +49,9 @@ internal class CodingController : BaseController
         ViewSessions(listOfReport);
         // do another sql to figure out the total and average duration
         // display it
-
     }
 
-    public List<CodingSession> GetReport(ReportOption choice, string unit)
+    public List<CodingSession>? GetReport(ReportOption choice, string unit)
     {
         var sql = $"SELECT * FROM coding_tracker ";
         _ = choice switch
@@ -63,6 +61,8 @@ internal class CodingController : BaseController
             ReportOption.Years => sql += $"WHERE EndTime > date('now','start of year', '-{unit} years')",
             ReportOption.Total => sql
         };
+
+        sql += " ORDER BY StartTime DESC";
 
         return GetSessions(sql);
     }
@@ -81,11 +81,15 @@ internal class CodingController : BaseController
 
         return listOfCodingSessions;
     }
-    public void ViewSessions(List<CodingSession>? list = null)
+    public void ViewSessions(List<CodingSession>? list = null, List<object> additionalList = null)
     {
         Helpers.CheckIfListIsNullOrEmpty(list);
 
         Helpers.CreateTable(list, ["ID", "Start Time", "End Time", "Duration"]);
+        if(additionalList != null)
+        {
+
+        }
 
         AnsiConsole.MarkupLine("Press Any Key to Continue.");
         Console.ReadKey();
@@ -157,15 +161,9 @@ internal class CodingController : BaseController
 
     public void UpdateSession()
     {
-        Console.Clear();
         var list = GetSessions();
 
-        if (list == null)
-        {
-            DisplayMessage("No sessions recorded.", "red");
-            Console.ReadKey();
-            return;
-        }
+        Helpers.CheckIfListIsNullOrEmpty(list);
 
         var sessionToUpdate = AnsiConsole.Prompt(
             new SelectionPrompt<CodingSession>()
@@ -182,9 +180,10 @@ internal class CodingController : BaseController
 
         var newStartTime = Helpers.GetDateInput("Enter the start time of your coding session (yyyy-MM-dd HH:mm)");
         var newEndTime = Helpers.GetDateInput("Enter the end time of your coding session (yyyy-MM-dd HH:mm)");
+
         while (Helpers.IsEndTimeLowerThanStartTime(newStartTime, newEndTime))
         {
-            newEndTime = Helpers.GetDateInput("Invalid input. End time must be after start time.");
+            newEndTime = Helpers.GetDateInput("Invalid input. End time must be higher than start time.");
         }
 
         var newSession = new CodingSession(
@@ -192,7 +191,7 @@ internal class CodingController : BaseController
             DateTime.ParseExact(newEndTime, "yyyy-MM-dd HH:mm", new CultureInfo("en-US"))
         );
 
-        var affectedRows = connection.Execute(sql, new { Id = sessionToUpdate.Id, NewStartTime = newStartTime, NewEndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
+        var affectedRows = connection.Execute(sql, new { sessionToUpdate.Id, NewStartTime = newStartTime, NewEndTime = newEndTime, Duration = newSession.CalculateDuration().ToString() });
 
         if (affectedRows > 0) DisplayMessage("Update successful.", "green");
         else DisplayMessage("No changes made");
